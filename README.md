@@ -127,7 +127,7 @@ Configure your client with:
 
 Rotate a token by changing the server environment and client secret, then restarting/recreating the relay. There is no live rotation endpoint or second-token overlap. Keep client tokens in the platform's secure credential store.
 
-The companion iOS application is managed separately as a free TestFlight distribution for now. In its **Server settings**, enter your HTTPS origin (for example, `https://bridge.example`, without `/acp`) and the same device token; the app constructs the authenticated WSS endpoint. This repository distributes the backend, not TestFlight invitations. Any compatible client can implement this transport without that application.
+The companion iOS application is managed separately as a free TestFlight distribution for now. Open its **Settings > Agent connection** (or **Complete setup**), enter your HTTPS origin (for example, `https://bridge.example`, without `/acp`) and the same device token; the app constructs the authenticated WSS endpoint. This repository distributes the backend, not TestFlight invitations. Any compatible client can implement this transport without that application.
 
 ## Transport, ACP subset, and MCP
 
