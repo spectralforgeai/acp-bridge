@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "acp-bridge"
+version = "0.1.0"
+description = "Authenticated integration-agnostic ACP WebSocket to stdio relay"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi==0.162.0",
+  "starlette==1.10.0",
+  "uvicorn==0.54.0",
+  "websockets>=15,<17",
+]
+
+[project.urls]
+Homepage = "https://github.com/spectralforgeai/acp-bridge"
+Repository = "https://github.com/spectralforgeai/acp-bridge"
+Issues = "https://github.com/spectralforgeai/acp-bridge/issues"
+
+[project.scripts]
+acp-bridge = "acp_bridge.__main__:main"
+
+[project.optional-dependencies]
+test = ["pytest==9.2.0", "pytest-asyncio==1.4.1"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/acp_bridge"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
