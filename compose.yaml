@@ -1,0 +1,57 @@
+services:
+  acp-bridge:
+    build:
+      context: .
+    image: acp-bridge:local
+    init: true
+    user: "10001:10001"
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      BRIDGE_DEVICE_TOKEN: ${BRIDGE_DEVICE_TOKEN:?Generate and set BRIDGE_DEVICE_TOKEN in .env}
+      ACP_AGENT_COMMAND: ${ACP_AGENT_COMMAND:?Set a real JSON argv ACP_AGENT_COMMAND in .env}
+      ACP_WORKING_DIRECTORY: ${ACP_WORKING_DIRECTORY:?Set an absolute agent-side ACP_WORKING_DIRECTORY in .env}
+      ACP_MCP_SERVERS: ${ACP_MCP_SERVERS:-[]}
+      ACP_MAX_FRAME_BYTES: ${ACP_MAX_FRAME_BYTES:-1048576}
+      ACP_STARTUP_SECONDS: ${ACP_STARTUP_SECONDS:-20}
+      ACP_IDLE_SECONDS: ${ACP_IDLE_SECONDS:-300}
+      ACP_SESSION_SECONDS: ${ACP_SESSION_SECONDS:-3600}
+      ACP_IO_SECONDS: ${ACP_IO_SECONDS:-10}
+      ACP_TERMINATE_SECONDS: ${ACP_TERMINATE_SECONDS:-0.5}
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 1.0
+    stop_grace_period: 15s
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=2).close()"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # For the README SSH transport, uncomment BOTH read-only file mounts.
+    # Prepare existing files with the ownership/modes described in the README.
+    # volumes:
+    #   - type: bind
+    #     source: ./secrets/id_ed25519
+    #     target: /run/agent/id_ed25519
+    #     read_only: true
+    #     bind:
+    #       create_host_path: false
+    #   - type: bind
+    #     source: ./secrets/known_hosts
+    #     target: /run/agent/known_hosts
+    #     read_only: true
+    #     bind:
+    #       create_host_path: false

@@ -1,0 +1,10 @@
+# Deny everything, including Git history, secrets, tests, and runtime files.
+**
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!README.md
+!LICENSE
+!src/
+!src/acp_bridge/
+!src/acp_bridge/*.py
